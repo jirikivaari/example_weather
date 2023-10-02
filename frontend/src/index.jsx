@@ -39,6 +39,7 @@ class Weather extends React.Component {
     let crd;
 
     // This could be wrapped in async+await structure
+    /* global navigator */
     navigator.geolocation.getCurrentPosition(async (pos) => {
       crd = pos.coords;
 
@@ -76,7 +77,7 @@ class Weather extends React.Component {
 
     return (
       <Stack gap={3}>
-        { weather.list && weather.list.slice(0, 5).map((e, i) => (
+        { weather.list && weather.list.slice(0, 5).map((e) => (
           <div className="p-2">
             <h3>
               { weather.city.name }

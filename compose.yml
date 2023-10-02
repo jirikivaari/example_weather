@@ -1,0 +1,40 @@
+services:
+  #
+  # Main services
+  #
+  backend:
+    # command: "bundle exec puma"
+    command: "/app/scripts/backend.sh"
+    tty: true
+    stdin_open: true
+    container_name: "weatherapp_backend"
+    user: "web:web"
+    build:
+      target: weatherapp_backend
+    volumes:
+     - ".:/app/"
+    environment:
+      - NODE_DEBUG
+      - PORT=9000
+      - APPID
+    ports:
+     - "9000:9000"
+
+  frontend:
+    command: "/app/scripts/frontend.sh"
+    tty: true
+    stdin_open: true
+    container_name: "weatherapp_frontend"
+    user: "web:web"
+    build:
+      target: weatherapp_frontend
+    volumes:
+     - ".:/app/"
+    environment:
+      - NODE_DEBUG
+      - PORT=8000
+#      - ENDPOINT='http://localhost:9000/api'
+    ports:
+     - "8000:8000"
+    links:
+     - backend
