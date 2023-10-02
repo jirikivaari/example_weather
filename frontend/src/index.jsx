@@ -55,7 +55,8 @@ class Weather extends React.Component {
       console.log(`More or less ${crd.accuracy} meters.`);
     },
     async (err) => {
-      const weather = await getWeatherFromApi(crd.latitude, crd.longitude);
+      const weather = await getWeatherFromApi();
+
       // Fetch the weather data from backend
       this.setState({
         weather,
