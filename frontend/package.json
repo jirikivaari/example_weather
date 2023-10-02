@@ -13,7 +13,9 @@
     "lint": "node_modules/.bin/eslint --ext .js --ext .jsx ."
   },
   "dependencies": {
+    "boostrap": "^2.0.0",
     "react": "^16.13.1",
+    "react-bootstrap": "^2.9.0",
     "react-dom": "^16.13.1"
   },
   "devDependencies": {
