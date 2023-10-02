@@ -77,8 +77,8 @@ class Weather extends React.Component {
 
     return (
       <Stack gap={3}>
-        { weather.list && weather.list.slice(0, 5).map((e) => (
-          <div className="p-2">
+        { weather.list && weather.list.slice(0, 5).map((e, i) => (
+          <div className="p-2" key={`${e.dt}`}>
             <h3>
               { weather.city.name }
               &nbsp;-&nbsp;
