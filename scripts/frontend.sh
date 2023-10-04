@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /app/frontend || (echo "Cannot find application"; exit 1)
+cd /app/frontend ||  { echo "Cannot find application"; exit 1; }
 
 # Loop to recover from random crashes
 while true; do

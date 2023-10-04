@@ -1,6 +1,8 @@
 #!/bin/bash
 
-cd /app/backend || (echo "Cannot find application"; exit 1)
+[[ -n "$APPID" ]] || { echo "Please set ENV variable APPID to API key."; exit 2; }
+
+cd /app/backend ||  { echo "Cannot find application"; exit 1; }
 
 # Loop to recover from random crashes
 while true; do
