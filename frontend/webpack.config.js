@@ -1,7 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
 
-const TransferWebpackPlugin = require('transfer-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const GLOBALS = {
@@ -11,7 +10,10 @@ const GLOBALS = {
 module.exports = {
   mode: 'development',
   cache: true,
-  devtool: 'cheap-module-eval-source-map',
+  devtool: 'eval-cheap-module-source-map',
+  stats: {
+    children: true,
+  },
   entry: {
     main: ['@babel/polyfill', path.join(__dirname, 'src/index.jsx')],
   },
@@ -23,14 +25,14 @@ module.exports = {
     ],
   },
   devServer: {
-    contentBase: 'src/public',
+    static: 'src/public/',
     historyApiFallback: true,
-    disableHostCheck: true,
+    allowedHosts: 'all',
     host: process.env.HOST || '0.0.0.0',
     port: process.env.PORT || 8000,
   },
   output: {
-    filename: '[name].[hash:8].js',
+    filename: '[name].[fullhash:8].js',
     publicPath: '/',
   },
   module: {
@@ -39,7 +41,7 @@ module.exports = {
         test: /\.(js|jsx)$/,
         include: path.resolve(__dirname, 'src'),
         loader: 'babel-loader',
-        query: {
+        options: {
           presets: [
             '@babel/preset-react',
             ['@babel/env', { targets: { browsers: ['last 2 versions'] }, modules: false }],
@@ -53,12 +55,9 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'src/public/index.html',
-      filename: 'index.html',
+      template: './src/public/index.html',
     }),
-    new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-    new TransferWebpackPlugin([{ from: 'src/public' }], '.'),
     new webpack.DefinePlugin(GLOBALS),
   ],
 };
