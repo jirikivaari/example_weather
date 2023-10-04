@@ -1,4 +1,4 @@
-const { app, appId, mapURI, targetCity } = require('../index.js');
+const { app } = require('../index.js');
 const { expect } = require('chai');
 const request = require('supertest');
 // const fetchMock = require('fetch-mock');
@@ -23,17 +23,20 @@ describe('GET /api/weather', () => {
     // fetchMock.restore();
   });
 
+  // Test that the API returns 200 OK
   it('responds with 200 OK', async () => {
     const response = await request(app.callback()).get('/api/weather');
     expect(response.status).to.equal(200);
   });
 
+  // Test that query without lat+long returns default data
   it('returns default weather data', async () => {
     const response = await request(app.callback()).get('/api/weather');
     expect(response.status).to.equal(200);
     expect(response.body).to.deep.equal(mockData1);
   });
 
+  // Test that query with lat+long returns lat+long-based data
   it('returns lat+long-based weather data', async () => {
     const response = await request(app.callback()).get('/api/weather?&lat=60.1695&long=24.9355');
     expect(response.status).to.equal(200);
