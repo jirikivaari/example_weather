@@ -10,7 +10,6 @@ const mapURI = process.env.MAP_ENDPOINT || 'http://api.openweathermap.org/data/2
 const geoURI = 'http://api.openweathermap.org/geo/1.0';
 const targetCity = process.env.TARGET_CITY || 'Helsinki,fi';
 const cityLimit = 1;
-
 const port = process.env.PORT || 9000;
 
 const app = new Koa();
@@ -31,6 +30,10 @@ const fetchCityCoords = async (lat, long,) => {
   return response && await response.json()[0] ? [response.json()[0].lat, response.json()[0].lon] : [60.1695, 24.9355];
 };
 
+// Function to fetch forecast data from OpenWeatherMap API
+// ARGUMENTS: lat, string, latitude of the location
+//           long, string, longitude of the location
+// RETURNS: object, weather data object
 const fetchForecast = async (lat, long,) => {
   let endpoint;
 
@@ -38,6 +41,7 @@ const fetchForecast = async (lat, long,) => {
   if (lat && long && /^[0-9]{1,3}\.[0-9]{1,15}$/.test(lat,) && /^[0-9]{1,3}\.[0-9]{1,15}$/.test(long,)) {
     // [cityLat, cityLong] = await fetchCityCoords(lat, long,);
     endpoint = `${mapURI}/forecast?lat=${lat}&lon=${long}&units=metric&appid=${appId}`;
+  // If no location data, use default location
   } else {
     endpoint = `${mapURI}/forecast?q=${targetCity}&appid=${appId}`;
   }
@@ -46,6 +50,7 @@ const fetchForecast = async (lat, long,) => {
   return response ? response.json() : {};
 };
 
+// Function to fetch weather data from OpenWeatherMap API
 router.get('/api/weather', async ctx => {
   const { lat, long, } = ctx.query;
   const weatherData = await fetchForecast(lat, long,);
@@ -59,5 +64,8 @@ app.use(router.routes(),);
 app.use(router.allowedMethods(),);
 
 app.listen(port,);
+
+// Needed for testing
+module.exports = app;
 
 console.log(`App listening on port ${port}`,);
