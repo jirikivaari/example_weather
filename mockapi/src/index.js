@@ -13,12 +13,12 @@ app.use(cors(),);
 
 // Function to provide mock data from OpenWeatherMap API to backend
 router.get('/data/2.5/forecast', async ctx => {
-  const { lat, long, targetCity } = ctx.query;
+  const { lat, lon, q } = ctx.query;
 
   // Return mock data based on arguments
-  if(lat && long) {
+  if(lat && lon ) {
     ctx.body = mockData2;
-  } else if(targetCity) {
+  } else if(q) {
     ctx.body = mockData1;
   } else {
     ctx.body = {};

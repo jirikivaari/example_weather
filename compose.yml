@@ -17,6 +17,7 @@ services:
       - NODE_DEBUG
       - PORT=9000
       - APPID
+      - MAP_ENDPOINT
     ports:
      - "9000:9000"
 
