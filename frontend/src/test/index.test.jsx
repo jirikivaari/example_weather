@@ -1,14 +1,22 @@
 /* eslint-disable global-require */
+
+// React-related imports
 import React from 'react';
 import { render, act } from '@testing-library/react';
 // import { shallow } from 'enzyme';
+
+// Testing libraries
 import {
   describe, it, before, after, beforeEach, afterEach,
 } from 'mocha';
 import { expect } from 'chai';
-import { JSDOM } from 'jsdom';
+
+// Used for mocking functions
 import sinon from 'sinon';
 import fetchMock from 'fetch-mock';
+
+// DOM-related imports
+import { JSDOM } from 'jsdom';
 import { XPathResult } from 'xpath';
 
 describe('Weather Component Testing', () => {
@@ -32,7 +40,8 @@ describe('Weather Component Testing', () => {
       },
     };
 
-    const mockData = require('./weatherData.json');
+    // Mock backend requests
+    const mockData = require('./weatherData1.json');
     fetchMock.mock('*', {
       status: 200,
       body: mockData,
@@ -61,20 +70,13 @@ describe('Weather Component Testing', () => {
     await new Promise((resolve) => setTimeout(resolve, 0));
   });
 
-  it('Renders component', async () => {
+  it('Index has correct header', async () => {
     act(() => {
       render(<Weather />);
     });
 
     const element = document.evaluate('/html/body/container/row[1]/h1', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
     expect(element.textContent).to.equal('Weather App');
-
-    // const h1 = rootContainer.querySelectorAll('h1')[0];
-    // expect(h1.textContent).to.equal('Weather App');
-
-    // Check that the component is displaying the mock data
-    // expect(wrapper.find('.temperature')).to.have.text('72°F');
-    // expect(wrapper.find('.description')).to.have.text('Sunny');
   });
 
   it('Has first weather item', async () => {
@@ -84,13 +86,40 @@ describe('Weather Component Testing', () => {
 
     const element = document.evaluate('//*[contains(@class, "weatherData")]/div/div[1]/div/div[1]/h3', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
     expect(element.textContent).contains('Helsinki');
+  });
 
-    // const h1 = rootContainer.querySelectorAll('h1')[0];
-    // expect(h1.textContent).to.equal('Weather App');
+  it('Has correct weather data', async () => {
+    await act(async () => {
+      render(<Weather />);
+    });
 
-    // Check that the component is displaying the mock data
-    // expect(wrapper.find('.temperature')).to.have.text('72°F');
-    // expect(wrapper.find('.description')).to.have.text('Sunny');
+    const temp = document.evaluate('//*[contains(@class, "weatherData")]/div/div[1]/div/div[1]/*[contains(@class, "temp")]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+    expect(temp.textContent).contains('9.74');
+
+    const wind = document.evaluate('//*[contains(@class, "weatherData")]/div/div[1]/div/div[1]/*[contains(@class, "wind")]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+    expect(wind.textContent).contains('3.98');
+  });
+
+  it('Has correct number of weather items', async () => {
+    await act(async () => {
+      render(<Weather />);
+    });
+
+    const weatherData = document.querySelector('.weatherData');
+    const items = weatherData.querySelectorAll('div.weatherItem');
+
+    expect(items.length).to.equal(5);
+  });
+
+  it('Has required weather icons', async () => {
+    await act(async () => {
+      render(<Weather />);
+    });
+
+    const weatherData = document.querySelector('.weatherData');
+    const items = weatherData.querySelectorAll('img.weatherIcon');
+
+    expect(items.length).to.equal(5);
   });
 });
 

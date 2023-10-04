@@ -1,4 +1,4 @@
-const baseURL = process.env.ENDPOINT;
+const baseURL = process.env.ENDPOINT || 'http://localhost:9000/api';
 
 export default async function getWeatherFromApi(lat, long) {
   let response;

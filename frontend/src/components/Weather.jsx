@@ -41,10 +41,10 @@ class Weather extends React.Component {
 
       // Debug data
       /* eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-      console.log('Your current position is:');
-      console.log(`Latitude : ${crd.latitude}`);
-      console.log(`Longitude: ${crd.longitude}`);
-      console.log(`More or less ${crd.accuracy} meters.`);
+      // console.log('Your current position is:');
+      // console.log(`Latitude : ${crd.latitude}`);
+      // console.log(`Longitude: ${crd.longitude}`);
+      // console.log(`More or less ${crd.accuracy} meters.`);
     },
     async (err) => {
       // Get weather data from backend and store for the view
@@ -81,7 +81,7 @@ class Weather extends React.Component {
     return (
       <Stack className="weatherData" gap={3}>
         {weather && weather.list && weather.list.slice(0, 5).map((e) => (
-          <div className="p-2" key={`weather-${e.dt}`}>
+          <div className="p-2 weatherItem" key={`weather-${e.dt}`}>
             <Container>
               <Row>
                 <Col>
@@ -96,10 +96,12 @@ class Weather extends React.Component {
                 <Col>
                   {e.weather[0].main}
                   &nbsp;
-                  {<img src={`/img/${e.weather[0].icon.slice(0, -1)}.svg`} alt="Weather icon" width="15" height="15" />}
+                  {<img className="weatherIcon" src={`/img/${e.weather[0].icon.slice(0, -1)}.svg`} alt="Weather icon" width="15" height="15" />}
                   <br />
                   Temp.:&nbsp;
-                  {e.main.temp}
+                  <span className="temp">
+                    {e.main.temp}
+                  </span>
                   &#8451;
                   &nbsp;
                   (
@@ -109,7 +111,9 @@ class Weather extends React.Component {
                   &#8451;)
                   <br />
                   Wind:&nbsp;
-                  {e.wind.speed}
+                  <span className="wind">
+                    {e.wind.speed}
+                  </span>
                   &nbsp; m/s
                 </Col>
                 <Col>
