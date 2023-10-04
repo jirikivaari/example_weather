@@ -3,8 +3,11 @@ const router = require('koa-router',)();
 const fetch = require('node-fetch',);
 const cors = require('kcors',);
 
+// The two most important variables. API key and API endpoint.
 const appId = process.env.APPID || '';
 const mapURI = process.env.MAP_ENDPOINT || 'http://api.openweathermap.org/data/2.5';
+
+// Secondary variables
 const targetCity = process.env.TARGET_CITY || 'Helsinki,fi';
 const port = process.env.PORT || 9000;
 
@@ -21,7 +24,6 @@ const fetchForecast = async (lat, long,) => {
 
   // Check and validate location data
   if (lat && long && /^[0-9]{1,3}\.[0-9]{1,15}$/.test(lat,) && /^[0-9]{1,3}\.[0-9]{1,15}$/.test(long,)) {
-    // [cityLat, cityLong] = await fetchCityCoords(lat, long,);
     endpoint = `${mapURI}/forecast?lat=${lat}&lon=${long}&units=metric&appid=${appId}`;
   // If no location data, use default location
   } else {
@@ -32,7 +34,7 @@ const fetchForecast = async (lat, long,) => {
   return response ? response.json() : {};
 };
 
-// Function to fetch weather data from OpenWeatherMap API
+// Function to fetch weather data from OpenWeatherMap API, returns JSON data
 router.get('/api/weather', async ctx => {
   const { lat, long, } = ctx.query;
   const weatherData = await fetchForecast(lat, long,);
@@ -49,4 +51,4 @@ app.listen(port,);
 // Needed for testing
 module.exports = { app, appId, mapURI, targetCity, };
 
-console.log(`App listening on port ${port}`,);
+console.log(`Backend listening on port ${port}`,);

@@ -5,23 +5,24 @@ const request = require('supertest');
 // const fetch = require('node-fetch');
 
 describe('GET /api/weather', () => {
+  // This data matches to mockapi JSON data
   const mockData1 = require('./weatherData1.json');
   const mockData2 = require('./weatherData2.json');
 
-  before(() => {
-    // Read mock data from file and feed it to API function
-    // fetchMock.mock(`https://${mapURI}/forecast?q=${targetCity}&appid=${appId}`, {
-    //   status: 200,
-    //   body: mockData,
-    // });
-  });
+  // before(() => {
+  //   // Read mock data from file and feed it to API function
+  //   fetchMock.mock(`https://${mapURI}/forecast?q=${targetCity}&appid=${appId}`, {
+  //     status: 200,
+  //     body: mockData,
+  //   });
+  // });
 
-  after(() => {
-    // delete global.window;
-    // delete global.document;
-    // dom.window.close();
-    // fetchMock.restore();
-  });
+  // after(() => {
+  //   delete global.window;
+  //   delete global.document;
+  //   dom.window.close();
+  //   fetchMock.restore();
+  // });
 
   // Test that the API returns 200 OK
   it('responds with 200 OK', async () => {

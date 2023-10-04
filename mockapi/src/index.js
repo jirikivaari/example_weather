@@ -17,6 +17,7 @@ router.get('/data/2.5/forecast', async ctx => {
 
   ctx.body = {};
 
+  // Demand that API Key is given or return 403.
   if(appid != "1234567890") {
     ctx.status = 403;
   // Return mock data based on latitude and longitude arguments
@@ -38,4 +39,4 @@ app.use(router.allowedMethods(),);
 
 app.listen(port,);
 
-console.log(`App listening on port ${port}`,);
+console.log(`Mockapi listening on port ${port}`,);
