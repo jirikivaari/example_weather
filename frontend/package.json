@@ -9,15 +9,17 @@
   "author": "Marko Klemetti <marko.klemetti@gmail.com>",
   "license": "UNLICENSED",
   "scripts": {
+    "build": "babel src -d dist",
     "start": "node_modules/.bin/webpack-dev-server --config webpack.config.js --progress --inline --colors",
-    "test": "mocha --require @babel/register src/test/*.test.js",
+    "test": "mocha --require @babel/register src/test/*.test.js*",
     "lint": "node_modules/.bin/eslint --ext .js --ext .jsx ."
   },
   "dependencies": {
     "boostrap": "^2.0.0",
     "react": "^16.13.1",
     "react-bootstrap": "^2.9.0",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "xpath-react": "^6.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.23.0",
