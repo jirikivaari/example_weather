@@ -38,3 +38,19 @@ services:
      - "8000:8000"
     links:
      - backend
+
+  mockapi:
+    command: "/app/scripts/mockapi.sh"
+    tty: true
+    stdin_open: true
+    container_name: "weatherapp_mockapi"
+    user: "web:web"
+    build:
+      target: weatherapp_mockapi
+    volumes:
+     - ".:/app/"
+    environment:
+      - NODE_DEBUG
+      - PORT=9100
+    ports:
+     - "9100:9100"
