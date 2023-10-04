@@ -1,11 +1,12 @@
 import React from 'react';
 
+// React components from Bootstrap
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-// import Accordion from 'react-bootstrap/Accordion';
 import Stack from 'react-bootstrap/Stack';
 
+// Function to fetch the weather data from backend
 import getWeatherFromApi from '../lib/api';
 
 /* global window */
@@ -16,12 +17,15 @@ class Weather extends React.Component {
     super(props);
 
     this.state = {
+      // Store weather data. JSON converted to JS object
       weather: {},
+      // Status variable for robot testing
       isLoading: true,
     };
   }
 
   async componentDidMount() {
+    // Location coordinates of the user
     let crd;
 
     // This could be wrapped in async+await structure
@@ -29,13 +33,13 @@ class Weather extends React.Component {
     navigator.geolocation.getCurrentPosition(async (pos) => {
       crd = pos.coords;
 
+      // Get weather data from backend and store for the view
       const weather = await getWeatherFromApi(crd.latitude, crd.longitude);
-
-      // Fetch the weather data from backend
       this.setState({
         weather,
       });
 
+      // Debug data
       /* eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
       console.log('Your current position is:');
       console.log(`Latitude : ${crd.latitude}`);
@@ -43,9 +47,8 @@ class Weather extends React.Component {
       console.log(`More or less ${crd.accuracy} meters.`);
     },
     async (err) => {
+      // Get weather data from backend and store for the view
       const weather = await getWeatherFromApi();
-
-      // Fetch the weather data from backend
       this.setState({
         weather,
       });
@@ -58,6 +61,7 @@ class Weather extends React.Component {
       maximumAge: 0,
     });
 
+    // Set isLoading for robot testing
     setTimeout(() => {
       this.setState({ isLoading: false });
     }, 2000);
@@ -73,10 +77,11 @@ class Weather extends React.Component {
   render() {
     const { weather } = this.state;
 
+    // Iterate over the weather data and show it in the view
     return (
-      <Stack gap={3}>
+      <Stack className="weatherData" gap={3}>
         {weather && weather.list && weather.list.slice(0, 5).map((e) => (
-          <div className="p-2" key={`${e.dt}`}>
+          <div className="p-2" key={`weather-${e.dt}`}>
             <Container>
               <Row>
                 <Col>
@@ -119,4 +124,5 @@ class Weather extends React.Component {
   }
 }
 
+// Export for testing
 export default Weather;

@@ -1,7 +1,6 @@
 /* eslint-disable global-require */
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { act } from 'react-dom/test-utils';
+import { render, act } from '@testing-library/react';
 // import { shallow } from 'enzyme';
 import {
   describe, it, before, after, beforeEach, afterEach,
@@ -10,17 +9,14 @@ import { expect } from 'chai';
 import { JSDOM } from 'jsdom';
 import sinon from 'sinon';
 import fetchMock from 'fetch-mock';
-import { XPathResult } from 'xpath-react';
-
-// global.document = JSDOM({
-//  url: 'http://localhost:3000/',
-// });
+import { XPathResult } from 'xpath';
 
 describe('Weather Component Testing', () => {
   let dom;
   let Weather;
 
   before(async () => {
+    // Create a fake DOM because these globals do not exist in Node
     dom = await JSDOM.fromURL('http://localhost:8000');
     global.window = dom.window;
     global.document = dom.window.document;
@@ -57,27 +53,37 @@ describe('Weather Component Testing', () => {
     fetchMock.restore();
   });
 
-  let rootContainer;
-
   beforeEach(() => {
-    rootContainer = document.createElement('div');
-    document.body.appendChild(rootContainer);
   });
 
-  afterEach(() => {
-    document.body.removeChild(rootContainer);
-    rootContainer = null;
-  });
-
-  it('Renders Hello World Title', async () => {
-    act(() => {
-      ReactDOM.render(<Weather />, rootContainer);
-    });
-
+  afterEach(async () => {
+    // Let microtasks run and complete
     await new Promise((resolve) => setTimeout(resolve, 0));
+  });
+
+  it('Renders component', async () => {
+    act(() => {
+      render(<Weather />);
+    });
 
     const element = document.evaluate('/html/body/container/row[1]/h1', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
     expect(element.textContent).to.equal('Weather App');
+
+    // const h1 = rootContainer.querySelectorAll('h1')[0];
+    // expect(h1.textContent).to.equal('Weather App');
+
+    // Check that the component is displaying the mock data
+    // expect(wrapper.find('.temperature')).to.have.text('72°F');
+    // expect(wrapper.find('.description')).to.have.text('Sunny');
+  });
+
+  it('Has first weather item', async () => {
+    await act(async () => {
+      render(<Weather />);
+    });
+
+    const element = document.evaluate('//*[contains(@class, "weatherData")]/div/div[1]/div/div[1]/h3', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+    expect(element.textContent).contains('Helsinki');
 
     // const h1 = rootContainer.querySelectorAll('h1')[0];
     // expect(h1.textContent).to.equal('Weather App');
