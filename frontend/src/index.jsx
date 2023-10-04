@@ -4,10 +4,16 @@ import ReactDOM from 'react-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Accordion from 'react-bootstrap/Accordion';
+// import Accordion from 'react-bootstrap/Accordion';
 import Stack from 'react-bootstrap/Stack';
 
 const baseURL = process.env.ENDPOINT;
+
+window.appStatus = false;
+
+const updateStatus = () => {
+  window.appStatus = true;
+};
 
 const getWeatherFromApi = async (lat, long) => {
   let response;
@@ -18,7 +24,10 @@ const getWeatherFromApi = async (lat, long) => {
     } else {
       response = await fetch(`${baseURL}/weather`);
     }
-    return response.json();
+    const data = await response.json();
+    if (data) {
+      return data;
+    }
   } catch (error) {
     console.error(error);
   }
@@ -32,6 +41,7 @@ class Weather extends React.Component {
 
     this.state = {
       weather: {},
+      isLoading: true,
     };
   }
 
@@ -67,9 +77,19 @@ class Weather extends React.Component {
     },
     {
       enableHighAccuracy: true,
-      timeout: 60000,
+      timeout: 20000,
       maximumAge: 0,
     });
+
+    setTimeout(() => {
+      this.setState({ isLoading: false });
+    }, 2000);
+  }
+
+  componentDidUpdate() {
+    if (!this.state.isLoading) {
+      updateStatus();
+    }
   }
 
   render() {
@@ -77,29 +97,43 @@ class Weather extends React.Component {
 
     return (
       <Stack gap={3}>
-        { weather.list && weather.list.slice(0, 5).map((e, i) => (
+        { weather && weather.list && weather.list.slice(0, 5).map((e) => (
           <div className="p-2" key={`${e.dt}`}>
-            <h3>
-              { weather.city.name }
-              &nbsp;-&nbsp;
-              { e.dt_txt }
-            </h3>
-            { e.weather[0].main }
-            &nbsp;
-            { <img src={`/img/${e.weather[0].icon.slice(0, -1)}.svg`} alt="Weather icon" width="15" height="15" /> }
-            <br />
-            Temperature:&nbsp;
-            { e.main.temp }
-            &nbsp;
-            (
-            { e.main.temp_min }
-            -
-            { e.main.temp_max }
-            )
-            <br />
-            Wind:&nbsp;
-            { e.wind.speed }
-            &nbsp; m/s
+            <Container>
+              <Row>
+                <Col>
+                  <h3>
+                    { weather.city.name }
+                    &nbsp;-&nbsp;
+                    { e.dt_txt }
+                  </h3>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  { e.weather[0].main }
+                  &nbsp;
+                  { <img src={`/img/${e.weather[0].icon.slice(0, -1)}.svg`} alt="Weather icon" width="15" height="15" /> }
+                  <br />
+                  Temp.:&nbsp;
+                  { e.main.temp }
+                  &#8451;
+                  &nbsp;
+                  (
+                  { e.main.temp_min }
+                  -
+                  { e.main.temp_max }
+                  &#8451;)
+                  <br />
+                  Wind:&nbsp;
+                  { e.wind.speed }
+                  &nbsp; m/s
+                </Col>
+                <Col>
+                  Extra information
+                </Col>
+              </Row>
+            </Container>
           </div>
         )) }
       </Stack>
@@ -108,6 +142,8 @@ class Weather extends React.Component {
 }
 
 ReactDOM.render(
-  <Weather />,
+  <Weather updateStatus={updateStatus} />,
   document.getElementById('app'),
 );
+
+export default Weather;
