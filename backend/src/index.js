@@ -4,7 +4,7 @@ const fetch = require('node-fetch',);
 const cors = require('kcors',);
 
 // The two most important variables. API key and API endpoint.
-const appId = process.env.APPID || '';
+const appId = process.env.APPID || '1234567890';
 const mapURI = process.env.MAP_ENDPOINT || 'http://api.openweathermap.org/data/2.5';
 
 // Secondary variables

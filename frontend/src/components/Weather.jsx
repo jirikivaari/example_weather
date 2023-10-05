@@ -56,7 +56,7 @@ class Weather extends React.Component {
       console.warn(`ERROR(${err.code}): ${err.message}`);
     },
     {
-      enableHighAccuracy: true,
+      enableHighAccuracy: false,
       timeout: 20000,
       maximumAge: 0,
     });

@@ -1,6 +1,6 @@
 // Testing libraries
 import {
-  describe, it, before, after, beforeEach, afterEach,
+  describe, it, afterEach,
 } from 'mocha';
 import { expect } from 'chai';
 
@@ -13,7 +13,7 @@ import getWeatherFromApi from '../lib/api';
 describe('API Library Testing', () => {
   afterEach(async () => {
     fetchMock.restore();
-    
+
     // Let microtasks run and complete
     await new Promise((resolve) => setTimeout(resolve, 0));
   });
