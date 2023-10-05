@@ -3,7 +3,6 @@ services:
   # Main services
   #
   backend:
-    # command: "bundle exec puma"
     command: "/app/scripts/backend.sh"
     tty: true
     stdin_open: true
@@ -39,6 +38,23 @@ services:
      - "8000:8000"
     links:
      - backend
+
+  testing:
+    command: "/app/scripts/test.sh"
+    tty: true
+    stdin_open: true
+    container_name: "weatherapp_testing"
+    user: "web:web"
+    build:
+      target: weatherapp_testing
+    volumes:
+     - ".:/app/"
+    environment:
+      - NODE_DEBUG
+      - MAP_ENDPOINT=http://mockapi:9100/data/2.5
+      - START_SHELL
+    links:
+     - mockapi
 
   mockapi:
     command: "/app/scripts/mockapi.sh"

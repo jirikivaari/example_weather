@@ -23,9 +23,19 @@ FROM weatherapp_base AS weatherapp_mockapi
 ADD --chown=web mockapi/package*.json /app/mockapi
 RUN cd /app/mockapi && npm install
 
-# Image for running robot tests
+# Image for running tests
+# Combine backend and frontend stages
 FROM weatherapp_base AS weatherapp_testing
-RUN apt install python3-pip chromium && \ 
-    pip3 install --upgrade robotframework-seleniumlibrary robotframework-react
+COPY --from=weatherapp_backend /app/backend /app/backend
+COPY --from=weatherapp_frontend /app/frontend /app/frontend
+RUN apt-get update && apt-get -y install \
+    # Install Python3, pip and chromium for Robot Framework
+    python3-full python3-pip chromium firefox-esr && \
+    # Use virtual env so custom pip packages can be installed 
+    python3 -m venv /python3 && \
+    # Install Robot Framework and Selenium Library
+    . /python3/bin/activate && pip install robotframework-seleniumlibrary robotframework-react
+
+USER web
 
 ENTRYPOINT [ "/bin/bash" ]

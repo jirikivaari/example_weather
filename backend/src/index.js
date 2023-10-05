@@ -5,7 +5,17 @@ const cors = require('kcors',);
 
 // The two most important variables. API key and API endpoint.
 const appId = process.env.APPID || '1234567890';
-const mapURI = process.env.MAP_ENDPOINT || 'http://api.openweathermap.org/data/2.5';
+
+// Set API depending on environment
+let mapURI;
+if (process.env.MAP_ENDPOINT) {
+  mapURI = process.env.MAP_ENDPOINT;
+} else if (process.env.NODE_ENV === 'test') {
+  mapURI = 'http://localhost:9100/data/2.5';
+} else {
+  mapURI = 'http://api.openweathermap.org/data/2.5';
+}
+console.log(`MAP_ENDPOINT: ${mapURI}`,);
 
 // Secondary variables
 const targetCity = process.env.TARGET_CITY || 'Helsinki,fi';
@@ -29,6 +39,7 @@ const fetchForecast = async (lat, long,) => {
   } else {
     endpoint = `${mapURI}/forecast?q=${targetCity}&appid=${appId}`;
   }
+  console.log(`ENDPOINT: ${endpoint}`,);
   const response = await fetch(endpoint,);
 
   return response ? response.json() : {};

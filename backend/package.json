@@ -6,7 +6,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "start": "node src/index.js",
-    "test": "MAP_ENDPOINT='http://localhost:9100/data/2.5' mocha src/test/*test.js* --exit",
+    "test": "NODE_ENV=test mocha src/test/*test.js* --exit",
     "dev": "DEBUG=weathermap ./node_modules/.bin/nodemon src/index.js",
     "lint": "eslint src/*.js"
   },
