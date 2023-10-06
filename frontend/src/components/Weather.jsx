@@ -85,14 +85,14 @@ class Weather extends React.Component {
             <Container className="bg-light bg-gradient rounded p-2">
               <Row>
                 <Col>
-                  <h3>
+                  <h4>
                     {weather.city.name}
                     &nbsp;-&nbsp;
                     {e.dt_txt}
-                  </h3>
+                  </h4>
                 </Col>
               </Row>
-              <Row>
+              <Row className="weatherDetails">
                 <Col>
                   {e.weather[0].main}
                   &nbsp;

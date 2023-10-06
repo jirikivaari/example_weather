@@ -84,7 +84,7 @@ describe('Weather Component Testing', () => {
       render(<Weather />);
     });
 
-    const element = document.evaluate('//*[contains(@class, "weatherData")]/div/div[1]/div/div[1]/h3', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+    const element = document.evaluate('//*[contains(@class, "weatherData")]/div/div[1]/div/div[1]/h4', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
     expect(element.textContent).contains('Helsinki');
   });
 
