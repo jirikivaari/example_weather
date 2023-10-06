@@ -37,7 +37,7 @@ const fetchForecast = async (lat, long,) => {
     endpoint = `${mapURI}/forecast?lat=${lat}&lon=${long}&units=metric&appid=${appId}`;
   // If no location data, use default location
   } else {
-    endpoint = `${mapURI}/forecast?q=${targetCity}&appid=${appId}`;
+    endpoint = `${mapURI}/forecast?q=${targetCity}&units=metric&appid=${appId}`;
   }
   console.debug(`fetchForecast: ${endpoint}`,);
   const response = await fetch(endpoint,);

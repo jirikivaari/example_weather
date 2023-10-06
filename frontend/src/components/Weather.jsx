@@ -81,8 +81,8 @@ class Weather extends React.Component {
     return (
       <Stack className="weatherData" gap={3}>
         {weather && weather.list && weather.list.slice(0, 5).map((e) => (
-          <div className="p-2 weatherItem" key={`weather-${e.dt}`}>
-            <Container>
+          <div className="p-1 weatherItem" key={`weather-${e.dt}`}>
+            <Container className="bg-light bg-gradient rounded p-2">
               <Row>
                 <Col>
                   <h3>
