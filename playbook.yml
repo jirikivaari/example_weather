@@ -1,0 +1,152 @@
+---
+- name: "Manage weather application"
+  hosts: all
+  become: true
+  tasks:
+    - name: Install aptitude
+      tags:
+        - setup
+      ansible.builtin.apt:
+        name: aptitude
+        update_cache: true
+
+    - name: Install required system packages
+      tags:
+        - setup
+      ansible.builtin.apt:
+        pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - python3-pip
+          - virtualenv
+          - python3-setuptools
+          - git
+        update_cache: true
+
+    - name: Install Docker python module
+      tags:
+        - setup
+      ansible.builtin.pip:
+        name:
+          - docker
+          - docker-compose
+
+    - name: Symlink docker-compose to /usr/bin
+      tags:
+        - setup
+      ansible.builtin.file:
+        src: /usr/libexec/docker/cli-plugins/docker-compose
+        dest: /usr/bin/docker-compose
+        state: link
+
+    - name: Add Docker GPG apt Key
+      tags:
+        - setup
+      ansible.builtin.apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker Repository
+      tags:
+        - setup
+      ansible.builtin.apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: Update apt and install docker-ce
+      tags:
+        - setup
+      ansible.builtin.apt:
+        name: docker-ce
+        update_cache: true
+
+    - name: Add the user 'web'
+      tags:
+        - setup
+      ansible.builtin.user:
+        name: web
+        comment: Web App
+
+    - name: Recursively remove old application directory
+      tags:
+        - setup
+      ansible.builtin.file:
+        path: /app
+        state: absent
+
+    # - name: Move any existing repository away
+    #   tags:
+    #     - setup
+    #   ansible.builtin.command: "mv -f /app /app.bak"
+    #   args:
+    #     removes: /app
+
+    - name: Git checkout application repository
+      tags:
+        - setup
+      ansible.builtin.git:
+        repo: 'https://github.com/jirikivaari/example_weather'
+        dest: /app
+        version: master
+
+    - name: Set env variables
+      tags:
+        - setup
+      ansible.builtin.copy:
+        content: "APPID={{ APPID }}\n"
+        dest: "/app/.env"
+        mode: '0644'
+
+    - name: Change ownership of application directory
+      tags:
+        - setup
+      ansible.builtin.file:
+        path: /app
+        owner: web
+        state: directory
+        recurse: true
+
+    - name: Tear down existing services
+      tags:
+        - start
+      community.docker.docker_compose:
+        project_src: /app
+        state: absent
+
+    - name: Start services with compose
+      tags:
+        - start
+      community.docker.docker_compose:
+        services:
+          - frontend
+          - backend
+        project_src: /app
+        build: true
+        env_file: /app/.env
+      register: output
+
+    - name: "Print debug output"
+      tags:
+        - start
+      ansible.builtin.debug:
+        var: output
+
+    - name: Restart services
+      tags:
+        - restart
+      community.docker.docker_compose:
+        project_src: /app
+        build: false
+        restarted: true
+      register: output
+
+    - name: Stop all services
+      tags:
+        - stop
+      community.docker.docker_compose:
+        project_src: /app
+        build: false
+        stopped: true
+      register: output
