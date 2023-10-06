@@ -1,5 +1,6 @@
 body{
   position: absolute;
+  padding-top: 2vh;
   width: 100%;
   display: flex;
   justify-content: center;
