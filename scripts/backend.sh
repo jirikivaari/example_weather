@@ -11,7 +11,7 @@ if [[ -n "$DEBUG" ]]; then
 else
     while true; do
         npm run start 2>&1 |tee -a /logs/backend.log
-        echo "$(date +%F %H:%M): Backend CRASH! Rebooting."
+        echo "$(date "+%F %H:%M"): Backend CRASH! Rebooting."
         sleep 5
     done
 fi
