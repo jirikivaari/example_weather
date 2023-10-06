@@ -6,10 +6,12 @@ cd /app/backend ||  { echo "Cannot find application"; exit 1; }
 [[ -d "/app/frontend/node_modules" ]]  || mv /opt/node_modules_fe /app/frontend/node_modules
 [[ -d "/app/backend/node_modules" ]]  || mv /opt/node_modules_be /app/backend/node_modules
 
-# Run tests
+# Run backend unit tests
+# FIXME: Also fix for mocha / NPM bug.
 echo "Running backend unit tests."
 cd /app/backend
-env
+npm install
+chmod 0755 node_modules/.bin/mocha
 npm run test
 
 # Start backend server. Needed for robot integration tests.
@@ -18,13 +20,15 @@ npm run start > /logs/backend.log &
 
 # Start frontend server. Frontend test' node needs to access the server for DOM
 cd /app/frontend
+npm install
+chmod 0755 node_modules/.bin/mocha
 npm run start > /logs/frontend.log &
 
 # Wait for frontend to start. This will hang if it doesn't.
 echo "Waiting for frontend to start..."
 while ! tail -n +1 -f /logs/frontend.log | grep -qE "webpack.*compiled successfully"; do sleep 1; done
 
-# Run tests
+# Run frontend unit tests
 echo "Running frontend unit tests."
 cd /app/frontend
 npm run test
@@ -37,7 +41,7 @@ cd /app/frontend/src/test
 source /python3/bin/activate
 robot -d /logs --loglevel DEBUG integration-tests.robot
 
-echo "Testing finished!"
+echo "Testing finished! Cake is a lie."
 
-# Start bash
-[[ -n "$START_SHELL" ]] && /bin/bash
+# Do not quit if requested
+[[ -n "$STAY_ALIVE" ]] && /bin/bash
