@@ -3,6 +3,14 @@
 
 # Node
 node_modules
+.npm
 
 # Logs
 *.log
+
+# Cache
+.cache
+
+# Dev tools
+.bash_history
+.vscode
