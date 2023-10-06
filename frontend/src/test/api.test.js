@@ -10,6 +10,9 @@ import fetchMock from 'fetch-mock';
 // Function to fetch the weather data from backend
 import getWeatherFromApi from '../lib/api';
 
+import mockData1 from './weatherData1.json';
+import mockData2 from './weatherData2.json';
+
 describe('API Library Testing', () => {
   afterEach(async () => {
     fetchMock.restore();
@@ -20,10 +23,9 @@ describe('API Library Testing', () => {
 
   it('Returns correct data without arguments', async () => {
     // Mock backend requests
-    const mockData = require('./weatherData1.json');
     fetchMock.mock('*', {
       status: 200,
-      body: mockData,
+      body: mockData1,
     });
 
     const weather = await getWeatherFromApi();
@@ -34,10 +36,9 @@ describe('API Library Testing', () => {
 
   it('Returns correct data with arguments', async () => {
     // Mock backend requests
-    const mockData = require('./weatherData2.json');
     fetchMock.mock('*', {
       status: 200,
-      body: mockData,
+      body: mockData2,
     });
 
     const weather = await getWeatherFromApi('60.1695', '24.9355');
@@ -59,6 +60,7 @@ describe('API Library Testing', () => {
     const fetchCalls = fetchMock.calls();
     const pattern = new RegExp('^http://localhost:9000/api/weather$');
     const callMade = fetchCalls.some((call) => pattern.test(call[0]));
+    // eslint-disable-next-line no-unused-expressions
     expect(callMade).to.be.true;
   });
 
@@ -74,6 +76,7 @@ describe('API Library Testing', () => {
     const fetchCalls = fetchMock.calls();
     const pattern = new RegExp('^http://localhost:9000/api/weather\\?lat=60.1695&long=24.9355$');
     const callMade = fetchCalls.some((call) => pattern.test(call[0]));
+    // eslint-disable-next-line no-unused-expressions
     expect(callMade).to.be.true;
   });
 });
