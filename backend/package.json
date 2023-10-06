@@ -4,6 +4,7 @@
   "description": "Weatherapp exercise backend",
   "author": "Marko Klemetti <marko.klemetti@gmail.com>",
   "license": "UNLICENSED",
+  "type": "module",
   "scripts": {
     "start": "node src/index.js",
     "test": "NODE_ENV=test mocha src/test/*test.js* --exit",

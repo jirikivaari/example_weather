@@ -1,7 +1,9 @@
-const Koa = require('koa',);
-const router = require('koa-router',)();
-const fetch = require('node-fetch',);
-const cors = require('kcors',);
+import Koa from 'koa';
+import Router from 'koa-router';
+import fetch from 'node-fetch';
+import cors from 'kcors';
+
+const router = Router();
 
 // API key for OpenWeatherMap API
 const appId = process.env.APPID || '1234567890';
@@ -21,7 +23,7 @@ console.debug(`OpenWeatherMap API URL: ${mapURI}`,);
 const targetCity = process.env.TARGET_CITY || 'Helsinki,fi';
 const port = process.env.PORT || 9000;
 
-const app = new Koa();
+export const app = new Koa();
 
 app.use(cors(),);
 
@@ -59,8 +61,5 @@ app.use(router.routes(),);
 app.use(router.allowedMethods(),);
 
 app.listen(port,);
-
-// Needed for testing
-module.exports = { app, appId, mapURI, targetCity, };
 
 console.log(`Backend listening on port ${port}`,);

@@ -1,13 +1,20 @@
 /* eslint-disable no-undef */
-const { app, } = require('../index.js',);
-const { expect, } = require('chai',);
-const request = require('supertest',);
-// const fetchMock = require('fetch-mock');
+import { app } from '../index.js';
+import { expect } from 'chai';
+import request from 'supertest';
+
+// Import for JSON mock data
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// import fetchMock from 'fetch-mock';
 
 describe('GET /api/weather', () => {
   // This data matches to mockapi JSON data
-  const mockData1 = require('./weatherData1.json',);
-  const mockData2 = require('./weatherData2.json',);
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+  const mockData1 = JSON.parse(fs.readFileSync(path.join(__dirname, 'weatherData1.json'), 'utf8'));
+  const mockData2 = JSON.parse(fs.readFileSync(path.join(__dirname, 'weatherData2.json'), 'utf8'));
 
   // before(() => {
   //   // Read mock data from file and feed it to API function
