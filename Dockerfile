@@ -12,17 +12,17 @@ ENV NODE_PATH="/usr/local/lib/node_modules"
 # Image for backend
 FROM weatherapp_base AS weatherapp_backend
 ADD --chown=web backend/package*.json /app/backend/
-RUN cd /app/backend && npm install -g
+RUN cd /app/backend && npm install && mv node_modules/* /usr/local/lib
 
 # Image for frontend
 FROM weatherapp_base AS weatherapp_frontend
 ADD --chown=web frontend/package*.json /app/frontend/
-RUN cd /app/frontend && npm install -g
+RUN cd /app/frontend && npm install && mv node_modules/* /usr/local/lib/
 
 # Image for Mocked Weather API
 FROM weatherapp_base AS weatherapp_mockapi
 ADD --chown=web mockapi/package*.json /app/mockapi/
-RUN cd /app/mockapi && npm install -g
+RUN cd /app/mockapi && npm install && mv node_modules/* /usr/local/lib/
 
 # Image for running tests
 # Combine backend and frontend stages
