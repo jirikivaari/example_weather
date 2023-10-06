@@ -9,6 +9,7 @@ services:
     container_name: "weatherapp_backend"
     user: "web:web"
     build:
+      context: .
       target: weatherapp_backend
     volumes:
      - ".:/app/"
@@ -28,6 +29,7 @@ services:
     container_name: "weatherapp_frontend"
     user: "web:web"
     build:
+      context: .
       target: weatherapp_frontend
     volumes:
      - ".:/app/"
@@ -48,6 +50,7 @@ services:
     container_name: "weatherapp_testing"
     user: "web:web"
     build:
+      context: .
       target: weatherapp_testing
     volumes:
      - ".:/app/"
@@ -65,6 +68,7 @@ services:
     container_name: "weatherapp_mockapi"
     user: "web:web"
     build:
+      context: .
       target: weatherapp_mockapi
     volumes:
      - ".:/app/"
