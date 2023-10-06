@@ -7,9 +7,13 @@ node_modules
 
 # Logs
 *.log
+logs/
 
 # Cache
 .cache
+
+# Local variables
+.env
 
 # Dev tools
 .bash_history
