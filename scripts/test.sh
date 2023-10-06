@@ -3,7 +3,8 @@
 cd /app/frontend ||  { echo "Cannot find application"; exit 1; }
 cd /app/backend ||  { echo "Cannot find application"; exit 1; }
 
-sleep 20
+[[ -d "/app/frontend/node_modules" ]]  || mv /opt/node_modules_fe /app/frontend/node_modules
+[[ -d "/app/backend/node_modules" ]]  || mv /opt/node_modules_be /app/backend/node_modules
 
 # Run tests
 echo "Running backend unit tests."

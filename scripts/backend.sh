@@ -1,8 +1,13 @@
 #!/bin/bash
 
-[[ -n "$APPID" ]] || { echo "Please set ENV variable APPID to API key."; exit 2; }
+# Move node_modules to the backend folder if they are not there
+[[ -d "/app/backend/node_modules" ]]  || mv /opt/node_modules /app/backend/node_modules
 
+[[ -n "$APPID" ]] || { echo "Please set ENV variable APPID to API key."; exit 2; }
 cd /app/backend ||  { echo "Cannot find application"; exit 1; }
+
+# Install dependencies in case something is missing
+npm install
 
 # Loop to recover from random crashes
 if [[ -n "$DEBUG" ]]; then

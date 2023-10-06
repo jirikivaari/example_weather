@@ -20,7 +20,7 @@
     "supertest": "^6.3.3"
   },
   "devDependencies": {
-    "babel-eslint": "^10.1.0",
+    "@babel/eslint-parser": "^7.22.15",
     "chai": "^4.3.10",
     "eslint": "^7.8.1",
     "eslint-config-standard": "^14.1.1",
