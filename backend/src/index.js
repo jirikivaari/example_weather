@@ -3,7 +3,7 @@ const router = require('koa-router',)();
 const fetch = require('node-fetch',);
 const cors = require('kcors',);
 
-// The two most important variables. API key and API endpoint.
+// API key for OpenWeatherMap API
 const appId = process.env.APPID || '1234567890';
 
 // Set API depending on environment
@@ -15,7 +15,7 @@ if (process.env.MAP_ENDPOINT) {
 } else {
   mapURI = 'http://api.openweathermap.org/data/2.5';
 }
-console.log(`MAP_ENDPOINT: ${mapURI}`,);
+console.debug(`OpenWeatherMap API URL: ${mapURI}`,);
 
 // Secondary variables
 const targetCity = process.env.TARGET_CITY || 'Helsinki,fi';
@@ -39,13 +39,14 @@ const fetchForecast = async (lat, long,) => {
   } else {
     endpoint = `${mapURI}/forecast?q=${targetCity}&appid=${appId}`;
   }
-  console.log(`ENDPOINT: ${endpoint}`,);
+  console.debug(`fetchForecast: ${endpoint}`,);
   const response = await fetch(endpoint,);
 
   return response ? response.json() : {};
 };
 
 // Function to fetch weather data from OpenWeatherMap API, returns JSON data
+// eslint-disable-next-line comma-dangle
 router.get('/api/weather', async ctx => {
   const { lat, long, } = ctx.query;
   const weatherData = await fetchForecast(lat, long,);
