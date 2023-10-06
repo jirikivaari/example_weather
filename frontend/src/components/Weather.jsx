@@ -117,7 +117,17 @@ class Weather extends React.Component {
                   &nbsp; m/s
                 </Col>
                 <Col>
-                  Extra information
+                  Humidity:&nbsp;
+                  {e.main.humidity}
+                  %
+                  <br />
+                  Rain in 1h:&nbsp;
+                  {e.rain && e.rain['3h'] ? e.rain['1h'] : 0 }
+                  mm
+                  <br />
+                  Probab. of precipitation:&nbsp;
+                  {e.pop}
+                  %
                 </Col>
               </Row>
             </Container>
