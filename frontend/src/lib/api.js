@@ -1,6 +1,6 @@
 let baseURL;
 
-if (process.env.ENDPOINT) {
+if (typeof (process) !== 'undefined' && process.env.ENDPOINT) {
   baseURL = process.env.ENDPOINT;
 } else if (typeof window !== 'undefined') {
   // eslint-disable-next-line no-undef, quotes
