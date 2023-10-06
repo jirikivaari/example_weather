@@ -1,4 +1,13 @@
-const baseURL = process.env.ENDPOINT || 'http://localhost:9000/api';
+let baseURL;
+
+if (process.env.ENDPOINT) {
+  baseURL = process.env.ENDPOINT;
+} else if (typeof window !== 'undefined') {
+  // eslint-disable-next-line no-undef, quotes
+  baseURL = `http://$(window.location.host):9000/api`;
+} else {
+  baseURL = 'http://localhost:9000/api';
+}
 
 export default async function getWeatherFromApi(lat, long) {
   let response;
