@@ -57,7 +57,7 @@ services:
     environment:
       - NODE_DEBUG
       - MAP_ENDPOINT=http://mockapi:9100/data/2.5
-      - START_SHELL
+      - STAY_ALIVE
     links:
      - mockapi
 
