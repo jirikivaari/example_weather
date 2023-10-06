@@ -30,14 +30,15 @@ class Weather extends React.Component {
 
     // This could be wrapped in async+await structure
     /* global navigator */
-    navigator.geolocation.getCurrentPosition(async (pos) => {
-      crd = pos.coords;
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        crd = pos.coords;
 
-      // Get weather data from backend and store for the view
-      const weather = await getWeatherFromApi(crd.latitude, crd.longitude);
-      this.setState({
-        weather,
-      });
+        // Get weather data from backend and store for the view
+        const weather = await getWeatherFromApi(crd.latitude, crd.longitude);
+        this.setState({
+          weather,
+        });
 
       // Debug data
       /* eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
@@ -45,21 +46,22 @@ class Weather extends React.Component {
       // console.log(`Latitude : ${crd.latitude}`);
       // console.log(`Longitude: ${crd.longitude}`);
       // console.log(`More or less ${crd.accuracy} meters.`);
-    },
-    async (err) => {
+      },
+      async (err) => {
       // Get weather data from backend and store for the view
-      const weather = await getWeatherFromApi();
-      this.setState({
-        weather,
-      });
+        const weather = await getWeatherFromApi();
+        this.setState({
+          weather,
+        });
 
-      console.warn(`ERROR(${err.code}): ${err.message}`);
-    },
-    {
-      enableHighAccuracy: false,
-      timeout: 20000,
-      maximumAge: 0,
-    });
+        console.warn(`ERROR(${err.code}): ${err.message}`);
+      },
+      {
+        enableHighAccuracy: false,
+        timeout: 20000,
+        maximumAge: 0,
+      },
+    );
 
     // Set isLoading for robot testing
     setTimeout(() => {

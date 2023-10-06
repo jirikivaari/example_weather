@@ -18,7 +18,9 @@ describe('API Library Testing', () => {
     fetchMock.restore();
 
     // Let microtasks run and complete
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise((resolve) => {
+      setTimeout(resolve, 0);
+    });
   });
 
   it('Returns correct data without arguments', async () => {
@@ -58,7 +60,7 @@ describe('API Library Testing', () => {
 
     // Check if a fetch call was made with the expected URL using regexp
     const fetchCalls = fetchMock.calls();
-    const pattern = new RegExp('^http://localhost:9000/api/weather$');
+    const pattern = /^http:\/\/localhost:9000\/api\/weather$/;
     const callMade = fetchCalls.some((call) => pattern.test(call[0]));
     // eslint-disable-next-line no-unused-expressions
     expect(callMade).to.be.true;
@@ -74,7 +76,7 @@ describe('API Library Testing', () => {
 
     // Check if a fetch call was made with the expected URL using regexp
     const fetchCalls = fetchMock.calls();
-    const pattern = new RegExp('^http://localhost:9000/api/weather\\?lat=60.1695&long=24.9355$');
+    const pattern = /^http:\/\/localhost:9000\/api\/weather\?lat=60.1695&long=24.9355$/;
     const callMade = fetchCalls.some((call) => pattern.test(call[0]));
     // eslint-disable-next-line no-unused-expressions
     expect(callMade).to.be.true;

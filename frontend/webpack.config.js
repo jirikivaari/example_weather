@@ -46,9 +46,6 @@ module.exports = {
             '@babel/preset-react',
             ['@babel/env', { targets: { browsers: ['last 2 versions'] }, modules: false }],
           ],
-          plugins: [
-            '@babel/plugin-proposal-class-properties',
-          ],
         },
       },
     ],
