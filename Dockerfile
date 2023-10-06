@@ -7,7 +7,7 @@ RUN adduser web --home /app --shell /bin/bash --disabled-password --gecos "" && 
     chown -R web:web /app /logs
 
 WORKDIR /app/
-ENV NODE_PATH "/usr/local/lib/node_modules"
+ENV NODE_PATH="/usr/local/lib/node_modules"
 
 # Image for backend
 FROM weatherapp_base AS weatherapp_backend
