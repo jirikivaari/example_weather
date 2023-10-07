@@ -50,7 +50,7 @@ describe('API Library Testing', () => {
     expect(weather.list[0].main.temp).to.be.equal(282.2);
   });
 
-  it('Calls the correct backend API with args', async () => {
+  it('Calls the correct backend API without args', async () => {
     fetchMock.mock('*', {
       status: 200,
       body: {},
