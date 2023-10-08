@@ -11,7 +11,9 @@ mkdir -p /app/logs
 npm install
 
 # Developer mode
-if [[ -n "$DEBUG" ]]; then
+if [[  -n "$FE_BUILD" ]]; then 
+    npm run build
+elif [[ -n "$DEBUG" ]]; then
     npm run dev 2>&1 |tee -a /app/logs/frontend.$(date +%F_%H-%M.log)
     exit 0
 else

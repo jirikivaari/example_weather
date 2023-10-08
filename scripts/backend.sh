@@ -13,7 +13,7 @@ npm install
 
 # Loop to recover from random crashes
 if [[ -n "$DEBUG" ]]; then
-    npm run dev 2>&1 |tee -a /app/logs/backend.$(date +%F_%H-%M.log)
+    npm run start 2>&1 |tee -a /app/logs/backend.$(date +%F_%H-%M.log)
     exit 0
 else
     while true; do

@@ -37,6 +37,7 @@ services:
       - NODE_DEBUG
       - DEBUG
       - PORT=8000
+      - FE_BUILD
 #      - ENDPOINT='http://localhost:9000/api'
     ports:
      - "8000:8000"

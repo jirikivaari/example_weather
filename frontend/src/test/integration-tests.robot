@@ -1,7 +1,7 @@
 *** Settings ***
 Library           SeleniumLibrary
 Library           String
-Library           Geolocation.py
+#Library           Geolocation.py
 Test Teardown     Close All Browsers
 
 *** Variables ***

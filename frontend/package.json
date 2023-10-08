@@ -1,6 +1,6 @@
 {
   "name": "weatherapp-frontend",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Weatherapp exercise frontend",
   "repository": {
     "type": "git",
@@ -9,7 +9,7 @@
   "author": "Marko Klemetti <marko.klemetti@gmail.com>",
   "license": "UNLICENSED",
   "scripts": {
-    "build": "babel src -d dist",
+    "build": "node_modules/.bin/webpack --config webpack.config.js && babel src -d dist",
     "start": "node_modules/.bin/webpack-dev-server --config webpack.config.js",
     "test": "mocha --require @babel/register src/test/*.test.js*",
     "lint": "node_modules/.bin/eslint --ext .js --ext .jsx ."
@@ -18,6 +18,7 @@
     "react": "^18.0.0",
     "react-bootstrap": "^2.9.0",
     "react-dom": "^18.2.0",
+    "webpack": "^5.88.2",
     "@babel/cli": "^7.23.0",
     "@babel/core": "^7.23.0",
     "@babel/plugin-transform-runtime": "^7.22.15",
@@ -43,7 +44,6 @@
     "jsdom": "^22.1.0",
     "mocha": "^10.2.0",
     "sinon": "^16.0.0",
-    "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1",
     "xpath": "^0.0.33"
