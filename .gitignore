@@ -7,7 +7,7 @@ node_modules
 
 # Logs
 *.log
-logs/
+logs/*.log*
 
 # Cache
 .cache
@@ -18,3 +18,12 @@ logs/
 # Dev tools
 .bash_history
 .vscode
+
+# Test artifacts
+.mozilla
+
+# Python artifacts
+.pyc
+
+# Public artifacts
+frontend/dist
