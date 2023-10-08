@@ -95,7 +95,7 @@
       tags:
         - setup
       ansible.builtin.copy:
-        content: "APPID={{ APPID }}\n"
+        content: "APPID={{ APPID }}\nFE_BUILD=1\n"
         dest: "/app/.env"
         mode: '0644'
 
@@ -120,6 +120,7 @@
         - start
       community.docker.docker_compose:
         services:
+          - nginx
           - frontend
           - backend
         project_src: /app
