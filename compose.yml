@@ -43,6 +43,23 @@ services:
     links:
      - backend
 
+  nginx:
+    image: nginx:latest
+    container_name: weatherapp_nginx
+    tty: true
+    stdin_open: true
+    command: /bin/bash -c "cat /etc/nginx/conf.d/templates/*.conf.template|envsubst '$$PRODUCTION_PORT' > /etc/nginx/conf.d/default.conf && cat /etc/nginx/conf.d/*.conf && nginx -g 'daemon off;'"
+    volumes:
+      - ./:/app
+      - ./nginx/:/etc/nginx/conf.d/templates
+    # TODO: use env vars here
+    ports:
+      - 80:80
+    environment:
+      - PRODUCTION_PORT=80
+    links:
+      - backend
+
   testing:
     command: "/app/scripts/test.sh"
     tty: true
