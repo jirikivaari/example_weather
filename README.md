@@ -59,7 +59,7 @@ This is not recommended way but the application can be started locally via npm. 
 
 1. Make sure you have [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 1. `cd /path/to/this/repository`
-1. Run: `bash scripts/local.sh`
+1. Run: `APPID=API_KEY_HERE bash scripts/local.sh`
 1. Please access the service with browser at: [http://localhost:8000](http://localhost:8000)
 
 ## Application Demo at Amazon AWS
