@@ -1,7 +1,10 @@
 #!/bin/bash
 
 # Move node_modules to the backend folder if they are not there
-[[ -d "/app/backend/node_modules" ]]  || mv /opt/node_modules /app/backend/node_modules
+if ! [[ -d "/app/backend/node_modules" ]]; then
+    echo "Copying node_modules, this will take a moment."
+    mv /opt/node_modules /app/backend/node_modules
+fi
 
 [[ -n "$APPID" ]] || { echo "Please set ENV variable APPID to API key."; exit 2; }
 cd /app/backend ||  { echo "Cannot find application"; exit 1; }

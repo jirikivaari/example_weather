@@ -1,7 +1,10 @@
 #!/bin/bash
 
 # Move node_modules to the frontend folder if they are not there
-[[ -d "/app/frontend/node_modules" ]]  || mv -v /opt/node_modules /app/frontend/node_modules
+if ! [[ -d "/app/frontend/node_modules" ]]; then
+    echo "Copying node_modules, this will take a moment."
+    mv /opt/node_modules /app/frontend/node_modules
+fi
 
 cd /app/frontend ||  { echo "Cannot find application"; exit 1; }
 
