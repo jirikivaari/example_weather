@@ -7,6 +7,8 @@ mkdir -p /app/logs
 [[ -d "/app/frontend/node_modules" ]]  || mv /opt/node_modules_fe /app/frontend/node_modules
 [[ -d "/app/backend/node_modules" ]]  || mv /opt/node_modules_be /app/backend/node_modules
 
+sleep 15
+
 # Run backend unit tests
 # FIXME: Also fix for mocha / NPM bug.
 echo "Running backend unit tests."
