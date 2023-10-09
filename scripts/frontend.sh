@@ -11,16 +11,9 @@ mkdir -p /app/logs
 npm install
 
 # Developer mode
-if [[  -n "$FE_BUILD" ]]; then 
+if [[ "$NODE_ENV" == "production" ]]; then 
     npm run build
-elif [[ -n "$DEBUG" ]]; then
+else
     npm run dev 2>&1 |tee -a /app/logs/frontend.$(date +%F_%H-%M.log)
     exit 0
-else
-    # Loop to recover from random crashes
-    while true; do
-        npm run start 2>&1 |tee -a /app/logs/frontend.$(date +%F_%H-%M.log)
-        echo "$(date "+%F %H:%M"): Frontend CRASH! Rebooting."
-        sleep 5
-    done
 fi
