@@ -1,13 +1,14 @@
 #!/bin/bash
 
 # Move node_modules to the frontend folder if they are not there
-[[ -d "/app/frontend/node_modules" ]]  || mv /opt/node_modules /app/frontend/node_modules
+[[ -d "/app/frontend/node_modules" ]]  || mv -v /opt/node_modules /app/frontend/node_modules
 
 cd /app/frontend ||  { echo "Cannot find application"; exit 1; }
 
 mkdir -p /app/logs
 
 # Install dependencies in case something is missing
+echo "Installing NPM dependencies..."
 npm install
 
 # Developer mode
