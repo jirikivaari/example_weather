@@ -1,91 +1,130 @@
-# Weatherapp
+# Weather Application
 
-There was a beautiful idea of building an app that would show the upcoming weather. The developers wrote a nice backend and a frontend following the latest principles and - to be honest - bells and whistles. However, the developers did not remember to add any information about the infrastructure or even setup instructions in the source code.
+Originally from: https://github.com/eficode/weatherapp
 
-Luckily we now have [docker compose](https://docs.docker.com/compose/) saving us from installing the tools on our computer, and making sure the app looks (and is) the same in development and in production. All we need is someone to add the few missing files!
+This simple weather application shows forecast of the current weather at user's location.
 
-## Prerequisites
+API Key from Open Weather Map is needed for the application to work.
 
-* An [openweathermap](http://openweathermap.org/) API key.
+## Application Usage with Docker
 
-## Returning your solution
+Requirements: Compatible Docker Host, please see Docker documentation.
 
-### Via github
+Run following command in terminal:
 
-* Make a copy of this repository in your own github account (do not fork unless you really want to be public).
-* Create a personal repository in github.
-* Make changes, commit them, and push them in your own repository.
-* Send us the url where to find the code.
+1. [Install Docker](https://docs.docker.com/get-docker/)
+1. [Install docker-compose](https://docs.docker.com/compose/install/)
+1. Execute: `cd /path/to/this/repository`
+1. For production: `APPID=API_KEY_HERE NODE_ENV=production docker-compose up --build backend frontend nginx`
+1. For development: `APPID=API_KEY_HERE docker-compose up frontend backend`
+1. There are environment variables available:
+  * These can be set by adding them in front the compose command and seperating them by space.
+  * `MAP_ENDPOINT` sets the base URL for Weather API endpoint. Optional.
+  * `APPID` sets the Open Weather Map API Key. Mandatory.
+1. Wait a few minutes and please access the service with browser at:
+  * Production: [http://localhost](http://localhost)
+  * Development: [http://localhost:8000](http://localhost:8000)
 
-### Via tar-package
 
-* Clone this repository.
-* Make changes and **commit them**.
-* Create a **.tgz** -package including the **.git**-directory, but excluding the **node_modules**-directories.
-* Send us the archive.
+## Application Usage with Ansible
 
-## Exercises
+Requirements: Ansible, remote instance to run Ansible
 
-Here are some things in different categories that you can do to make the app better. Before starting you need to get yourself an API key to make queries in the [openweathermap](http://openweathermap.org/). You can run the app locally using `npm i && npm start`.
+Ansible is recommended when no ready host with docker and docker-compose exists. Currently it has only been tested on Ubuntu 22.04 LTS. It is only meant for production usage. Please run following commands in terminal:
 
-### Docker
+1. [Get Ansible first](https://docs.ansible.com/ansible/latest/getting_started/index.html)
+1. Acquire eg. Amazon AWS EC2 Instance. Ubuntu LTS is a good choice.
+  1. It should have TCP ports 80 and 9000 enabled.
+    1. In AWS this requires creating a new security group.
+  1. Recommended way is to generate SSH Key Pair in PEM format and load it with eg with Bash:
+    * `eval $(ssh-agent) && ssh-add ssh-key-name-here.pem`
+1. Create host configuration file eg. `weather.hosts`
+    ```
+    [weather]
+    host1 ansible_host=AWS_INSTANCE_IP_HERE ansible_ssh_user=ubuntu
+    ```
+1. Check host is reachable: `ansible -i weather.hosts host1 -m ping` 
+1. Run setup script:
+    ```
+    ansible-playbook -i weather.hosts --extra-vars "APPID=API_KEY_HERE" --tags setup,start playbook.yml
+    ```
+1. Wait a moment and please access the service with browser at: `http://AWS_INSTANCE_IP_HERE`
+1. Run shutdown script: `ansible-playbook -i /usr/local/etc/ansible/hosts --tags stop playbook.yml`
 
-*Docker containers are central to any modern development initiative. By knowing how to set up your application into containers and make them interact with each other, you have learned a highly useful skill.*
+## Application Usage via local execution (development)
 
-* Add **Dockerfile**'s in the *frontend* and the *backend* directories to run them virtually on any environment having [docker](https://www.docker.com/) installed. It should work by saying e.g. `docker build -t weatherapp_backend . && docker run --rm -i -p 9000:9000 --name weatherapp_backend -t weatherapp_backend`. If it doesn't, remember to check your api key first.
+Requirements: npm
 
-* Add a **docker-compose.yml** -file connecting the frontend and the backend, enabling running the app in a connected set of containers.
+This is not recommended way but the application can be started locally via npm. Run following commands in terminal.
 
-* The developers are still keen to run the app and its pipeline on their own computers. Share the development files for the container by using volumes, and make sure the containers are started with a command enabling hot reload.
+1. Make sure you have [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+1. `cd /path/to/this/repository`
+1. Run: `bash scripts/local.sh`
+1. Please access the service with browser at: [http://localhost:8000](http://localhost:8000)
 
-### Node and React development
+## Application Demo at Amazon AWS
 
-*Node and React applications are highly popular technologies. Understanding them will give you an advantage in front- and back-end development projects.*
+The application demo is available at: [http://13.51.48.14/](http://13.51.48.14/)
 
-* The application now only reports the current weather. It should probably report the forecast e.g. a few hours from now. (tip: [openweathermap api](https://openweathermap.org/forecast5))
+## Application Testing Instructions
 
-* There are [eslint](http://eslint.org/) errors. Sloppy coding it seems. Please help.
+Requirements: Equal to section "Application Usage with Docker"
 
-* The app currently reports the weather only for location defined in the *backend*. Shouldn't it check the browser location and use that as the reference for making a forecast? (tip: [geolocation](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation))
+The application can be tested by following commands in terminal:
 
-### Testing
+1. `cd /path/to/this/repository`
+1. `docker-compose up --build testing`
+  1. The command will run backend, frontend and integration tests.
 
-*Test automation is key in developing good quality applications. Finding bugs in early stages of development is valuable in any software development project. With Robot Framework you can create integration tests that also serve as feature descriptions, making them exceptionally useful.*
+## Services
 
-* Create automated tests for the application. (tip: [mocha](https://mochajs.org/))
+The docker-compose file specifies several services:
+1. frontend: This handles development server and building for production.
+1. backend: This handles backend requests from frontend to Weather API servers.
+1. mockapi: This simulates Open Weather MAP API for testing.
+1. nginx: This provides production web server, and serves frontend assets.
+1. testing: This contains testing scripts to run unit and integration tests.
 
-* Create [Robot Framework](http://robotframework.org/) integration tests. Hint: Start by creating a third container that gives expected weather data and direct the backend queries there by redefining the **MAP_ENDPOINT**.
+## Remarks to the reviewer
 
-### Cloud
+1. The unit tests for Weather component don't test all cases which would happen for a real-world version.
+1. Integration tests to check that the container scripts, env. vars etc. do what they are supposed.
+1. The integration test files sometimes due to firefox crashing. In real-world app it would be investigated.
+1. There's not much verification of data from the backend opening door for XSS attacks.
+1. For Backend tests, fetch() was supposed to be mocked but apparently the common libs are not compatible.
+1. There is no access control for any of the backend services
+1. There hasn't been any performance testing or profiling for frontend or backend services.
+1. Not all browsers are tested.
+1. The application could be fuzzed by sending anomaly data via HTTP requests. This could reveal issues.
+1. The error message are not presented to the user when backend or API goes down.
+1. The repository could have CI features from eg. CircleCI which executes some automated tests or builds.
+1. There are some ESLint false positives, these have been marked.
+1. I would not use bash for anything more complex, and not copy-paste the script.
+1. There are no coverage maps or reports.
+1. Most browsers won't permi location sharing without HTTPS.
+1. The Mock API server has no tests other than the integration test.
+1. The Dockerfiles and entry files have a workaround for issue where npm doesn't install global packages correctly.
+1. Ports are static for now
+1. XZ or brotli compression for logs
+1. There could be NGINX reverse-proxy for more robust web server.
+  1. Also HTTPS and certificates.
+  1. Serve backend or frontend via regexp, or even vhost.
+1. Using memcached or redis for data storage would decrease request load.
+1. There would be room for improvement on layout/aesthetic side
+  1. Graphs using some sort of JS library
+  1. Colors for weather icons, and wind direction icons
+  1. Bootstrap themes
+  1. Animated backgrounds based on weather
+1. W3C HTML validator does not like the tags React produces even though it shouldn't use custom tags.
+1. It would be possible to do things like XHTML schema validation.
+1. Outdated, deprecated and unused packages could be automatically checked.
+1. Ideally the application would be available from docker registry or artifactory.
+1. There are possibility of updating-breaking changes because not all packages are downloaded with version freeze.
+1. Ideally there would be testing for different phones and eg. screenreaders.
+1. Ideally it would also be tested for accessibility for users with disabilities.
+1. Ideally ther woudl be compression and minimizatio
+1. fetch-mock uses deprecated library querystring
 
-*The biggest trend of recent times is developing, deploying and hosting your applications in cloud. Knowing cloud -related technologies is essential for modern IT specialists.*
+## Contact
 
-* Set up the weather service in a free cloud hosting service, e.g. [AWS](https://aws.amazon.com/free/) or [Google Cloud](https://cloud.google.com/free/).
-
-### Ansible
-
-*Automating deployment processes saves a lot of valuable time and reduces chances of costly errors. Infrastructure as Code removes manual steps and allows people to concentrate on core activities.*
-
-* Write [ansible](http://docs.ansible.com/ansible/intro.html) playbooks for installing [docker](https://www.docker.com/) and the app itself.
-
-### Documentation
-
-*Good documentation benefits everyone.*
-
-* Remember to update the README
-
-* Use descriptive names and add comments in the code when necessary
-
-### ProTips
-
-* When you are coding the application imagine that you are a freelancer developer developing an application for an important customer.
-
-* The app must be ready to deploy and work flawlessly.
-
-* The app must be easy to deploy to your local machine with and without Docker. 
-
-* Detailed instructions to run the app should be included in your forked version because a customer would expect detailed instructions also.
-
-* Structure the code and project folder structure in a modular and logical fashion for extra points.
-
-* Try to avoid any bugs or weirdness in the operating logic.
+Ari Timonen
