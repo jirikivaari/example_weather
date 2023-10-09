@@ -29,7 +29,8 @@ class Weather extends React.Component {
     let crd;
 
     // This could be wrapped in async+await structure
-    if ( typeof(navigator.geolocation) !== 'undefined' ) {
+    /* eslint-disable no-undef */
+    if (typeof (navigator.geolocation) !== 'undefined') {
       navigator.geolocation.getCurrentPosition(
         async (pos) => {
           crd = pos.coords;
@@ -63,11 +64,11 @@ class Weather extends React.Component {
         },
       );
     } else {
-        // Get weather data from backend and store for the view
-        const weather = await getWeatherFromApi();
-        this.setState({
-          weather,
-        });
+      // Get weather data from backend and store for the view
+      const weather = await getWeatherFromApi();
+      this.setState({
+        weather,
+      });
     }
 
     // Set isLoading for robot testing
@@ -105,7 +106,7 @@ class Weather extends React.Component {
                 <Col>
                   {e.weather[0].main}
                   &nbsp;
-                  {<img className="weatherIcon" src={`/img/${e.weather[0].icon.slice(0, -1)}.svg`} alt="Weather icon" width="15" height="15" />}
+                  <img className="weatherIcon" src={`/img/${e.weather[0].icon.slice(0, -1)}.svg`} alt="Weather icon" width="15" height="15" />
                   <br />
                   Temp.:&nbsp;
                   <span className="temp">

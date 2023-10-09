@@ -1,4 +1,6 @@
 /* eslint-disable global-require */
+/* eslint-disable testing-library/no-unnecessary-act */
+/* eslint-disable testing-library/no-node-access */
 
 // React-related imports
 import React from 'react';
@@ -67,6 +69,7 @@ describe('Weather Component Testing', () => {
 
   afterEach(async () => {
     // Let microtasks run and complete
+    /* eslint-disable no-promise-executor-return */
     await new Promise((resolve) => setTimeout(resolve, 0));
   });
 
