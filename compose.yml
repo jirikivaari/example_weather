@@ -15,7 +15,7 @@ services:
      - ".:/app/"
     environment:
       - NODE_DEBUG
-      - DEBUG
+      - NODE_ENV
       - PORT=9000
       - APPID
       - MAP_ENDPOINT
@@ -35,7 +35,6 @@ services:
      - ".:/app/"
     environment:
       - NODE_DEBUG
-      - DEBUG
       - PORT=8000
       - NODE_ENV
 #      - ENDPOINT='http://localhost:9000/api'
