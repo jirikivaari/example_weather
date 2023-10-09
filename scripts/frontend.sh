@@ -14,6 +14,6 @@ npm install
 if [[ "$NODE_ENV" == "production" ]]; then 
     npm run build
 else
-    npm run dev 2>&1 |tee -a /app/logs/frontend.$(date +%F_%H-%M.log)
+    npm run start 2>&1 |tee -a /app/logs/frontend.$(date +%F_%H-%M.log)
     exit 0
 fi
